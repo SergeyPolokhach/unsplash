@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Gallery</string>
+
+    <!--error-->
+    <string name="server_error">Server error</string>
+    <string name="no_internet_connection_error">No internet connection</string>
+
+    <!--title-->
+    <string name="title_detail_photo">Detail</string>
+    <string name="title_list_photos">Photos</string>
+    <string name="title_search_menu">Search</string>
+
+    <string name="empty_list_state">Looks like there are no photos.</string>
+    <string name="share">Share</string>
+    <string name="share_image_to">Share images to..</string>
+    <string name="download">Download</string>
+</resources>

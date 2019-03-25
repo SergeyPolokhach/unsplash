@@ -1,0 +1,108 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply from: 'versions.gradle'
+
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion as Integer
+    buildToolsVersion rootProject.ext.buildToolsVersion as String
+
+    defaultConfig {
+        applicationId "com.polohach.unsplash"
+        minSdkVersion rootProject.ext.minSdkVersion as Integer
+        targetSdkVersion rootProject.ext.targetSdkVersion as Integer
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
+
+        buildConfigField "String", "FILEPROVIDER_NAME", "\"com.polohach.unsplash.fileprovider\""
+    }
+
+    println("Debug Build number $buildNoDevelop")
+    println("Prod Build number $buildNoProd")
+    println("Build Git Hash $buildGitHash")
+
+    signingConfigs {
+        debug {
+            storeFile file("./debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+    }
+    buildTypes {
+        all {
+            buildConfigField "String", "GIT_HASH", "\"$buildGitHash\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "ACCESS_KEY", '"17c0e41bc4a70e036b389f946f2e5619e4ee74fde6bb49abced422b6b2db7cb3"'
+        }
+        debug {
+            debuggable true
+            minifyEnabled false
+            applicationIdSuffix ".debug"
+            versionNameSuffix "." + buildNoDevelop + " Dev_" + buildGitHash
+            signingConfig signingConfigs.debug
+            buildConfigField "String", "ENDPOINT", '"https://api.unsplash.com/"'
+        }
+        release {
+            debuggable false
+            minifyEnabled true
+            versionNameSuffix "." + buildNoProd
+            buildConfigField "String", "ENDPOINT", '"https://api.unsplash.com/"'
+        }
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // Support
+    implementation supportDependencies.lifecycleExtension
+    implementation supportDependencies.recyclerView
+    implementation supportDependencies.appCompat
+    implementation supportDependencies.multiDex
+    implementation supportDependencies.kotlin
+    implementation supportDependencies.design
+
+    // Bootstrap
+    implementation bootstrapDependencies.permission
+    implementation bootstrapDependencies.core
+    implementation bootstrapDependencies.ext
+
+    // RxJava
+    implementation rxJavaDependencies.rxJava2
+
+    // Retrofit
+    implementation retrofitDependencies.converter
+    implementation retrofitDependencies.retrofit
+    implementation retrofitDependencies.adapter
+
+    // Jackson
+    implementation jacksonDependencies.annotations
+    implementation jacksonDependencies.databind
+    implementation jacksonDependencies.core
+    implementation jacksonDependencies.joda
+
+    // Glide
+    implementation glideDependencies.glide
+
+    // PhotoView
+    implementation photoViewDependencies.photoView
+
+    // LoggingInterceptor
+    implementation(loggingInterceptorDependencies.interceptor) {
+        exclude group: 'org.json', module: 'json'
+    }
+}

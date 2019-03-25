@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00AEB4</color>
+    <color name="colorPrimaryDark">#FF005677</color>
+    <color name="colorAccent">#00AEB4</color>
+
+    <!-- base colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="white50">#7fffffff</color>
+
+    <!-- text colors -->
+    <color name="text_white">@color/white</color>
+
+    <!-- backgrounds colors -->
+    <color name="bg_white50">@color/white50</color>
+
+</resources>

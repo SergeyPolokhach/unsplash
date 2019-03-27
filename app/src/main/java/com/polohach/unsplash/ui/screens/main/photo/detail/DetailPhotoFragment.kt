@@ -1,20 +1,15 @@
 package com.polohach.unsplash.ui.screens.main.photo.detail
 
 import android.Manifest
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.View
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.cleveroad.bootstrap.kotlin_core.utils.ImageUtils
-import com.cleveroad.bootstrap.kotlin_core.utils.ImageUtils.createImageFileTemp
 import com.cleveroad.bootstrap.kotlin_core.utils.misc.MiscellaneousUtils.getExtra
 import com.cleveroad.bootstrap.kotlin_ext.getBitmap
 import com.cleveroad.bootstrap.kotlin_ext.safeLet
@@ -82,10 +77,10 @@ class DetailPhotoFragment : BaseFragment<DetailPhotoVM>(), View.OnClickListener 
 
     override fun observeLiveData(viewModel: DetailPhotoVM) {
         viewModel.apply {
-            downloadPhotoLD.observe(this@DetailPhotoFragment, Observer { bitmap ->
-                bitmap?.let {
-                    createFileTemp(it)
-                    downloadPhotoLD.value = null
+            sharePhotoLD.observe(this@DetailPhotoFragment, Observer {
+                it?.run {
+                    sharePhoto(value)
+                    sharePhotoLD.value = null
                 }
             })
         }
@@ -137,27 +132,11 @@ class DetailPhotoFragment : BaseFragment<DetailPhotoVM>(), View.OnClickListener 
     }
 
     private fun share() {
-        sharePhoto(createFileTemp(ivPhoto.getBitmap()))
+        viewModel.createShareFile(context, ivPhoto.getBitmap())
     }
 
     private fun download() {
-        viewModel.downloadPhoto(photoId)
-    }
-
-    private fun createFileTemp(bitmap: Bitmap?): File? {
-        var file: File? = null
-        safeLet(context, bitmap) { ctx, photo ->
-            createImageFileTemp(ctx, true).also { fileTemp ->
-                ImageUtils.saveBitmap(fileTemp, Bitmap.createBitmap(photo))
-                ContentValues().apply {
-                    put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
-                    put(MediaStore.MediaColumns.DATA, fileTemp.absolutePath)
-                    ctx.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, this)
-                }
-                file = fileTemp
-            }
-        }
-        return file
+        viewModel.downloadPhoto(context, photoId)
     }
 
     private fun sharePhoto(photoFile: File?) {

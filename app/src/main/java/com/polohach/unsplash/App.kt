@@ -13,6 +13,7 @@ class App : Application() {
             private set
 
         lateinit var appComponent: AppComponent
+            private set
     }
 
     override fun attachBaseContext(base: Context) {

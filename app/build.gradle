@@ -86,7 +86,8 @@ dependencies {
     implementation bootstrapDependencies.ext
 
     // RxJava
-    implementation rxJavaDependencies.rxJava2
+    implementation rxDependencies.rxJava2
+    implementation rxDependencies.rxAndroid
 
     // Retrofit
     implementation retrofitDependencies.converter

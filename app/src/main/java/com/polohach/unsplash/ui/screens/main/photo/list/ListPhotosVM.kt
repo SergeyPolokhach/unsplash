@@ -5,7 +5,6 @@ import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import com.polohach.unsplash.App
 import com.polohach.unsplash.models.Photo
-import com.polohach.unsplash.network.api.modules.UnsplashModule
 import com.polohach.unsplash.providers.UnsplashProvider
 import com.polohach.unsplash.ui.base.BaseViewModel
 import com.polohach.unsplash.utils.EMPTY_STRING

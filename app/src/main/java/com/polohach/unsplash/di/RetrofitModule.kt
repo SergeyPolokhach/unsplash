@@ -10,7 +10,6 @@ import com.polohach.unsplash.BuildConfig
 import com.polohach.unsplash.network.REQUEST_TAG
 import com.polohach.unsplash.network.RESPONSE_TAG
 import com.polohach.unsplash.network.TIMEOUT_IN_SECONDS
-import com.polohach.unsplash.network.api.modules.NetworkErrorUtils
 import com.polohach.unsplash.network.api.retrofit.UnsplashApi
 import dagger.Module
 import dagger.Provides
@@ -25,11 +24,6 @@ import javax.inject.Singleton
 
 @Module
 class RetrofitModule {
-
-    @Provides
-    @Singleton
-    fun providerNetworkErrorUtils(mapper: ObjectMapper): NetworkErrorUtils =
-            NetworkErrorUtils(mapper)
 
     @Provides
     @Singleton
@@ -50,7 +44,7 @@ class RetrofitModule {
 
     @Provides
     @Singleton
-    fun providerOkHttpClient(interceptor: Interceptor) : OkHttpClient =
+    fun providerOkHttpClient(interceptor: Interceptor): OkHttpClient =
             OkHttpClient.Builder()
                     .connectTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                     .readTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
@@ -76,14 +70,6 @@ class RetrofitModule {
 
     @Provides
     @Singleton
-    fun providerObjectMapper(jodaModule: JodaModule): ObjectMapper =
-            ObjectMapper()
-                    .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                    .registerModule(jodaModule)
-
-    @Provides
-    @Singleton
     fun providerAdapterFactory(): RxJava2CallAdapterFactory =
             RxJava2CallAdapterFactory.create()
 
@@ -94,5 +80,13 @@ class RetrofitModule {
 
     @Provides
     @Singleton
-    fun providerJodaModule() : JodaModule = JodaModule()
+    fun providerObjectMapper(jodaModule: JodaModule): ObjectMapper =
+            ObjectMapper()
+                    .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .registerModule(jodaModule)
+
+    @Provides
+    @Singleton
+    fun providerJodaModule(): JodaModule = JodaModule()
 }

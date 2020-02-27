@@ -3,14 +3,14 @@ package com.polohach.unsplash.network.api.converters
 import com.polohach.unsplash.models.Photo
 import com.polohach.unsplash.models.PhotoModel
 import com.polohach.unsplash.models.converters.BaseConverter
+import com.polohach.unsplash.models.converters.Converter
 import com.polohach.unsplash.network.api.beans.PhotoBean
 
-interface PhotoBeanConverter
+interface PhotoBeanConverter : Converter<PhotoBean, Photo>
 
-class PhotoBeanConverterImpl : BaseConverter<PhotoBean, Photo>(), PhotoBeanConverter {
-
-    private val linksBeanConverter by lazy { LinksBeanConverterImpl() }
-    private val urlsBeanConverter by lazy { UrlsBeanConverterImpl() }
+class PhotoBeanConverterImpl(private val linksBeanConverter: LinksBeanConverter,
+                             private val urlsBeanConverter: UrlsBeanConverter)
+    : BaseConverter<PhotoBean, Photo>(), PhotoBeanConverter {
 
     override fun processConvertInToOut(inObject: PhotoBean) = inObject.run {
         PhotoModel(color, createdAt, description, height, id, likedByUser, likes,

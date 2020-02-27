@@ -3,13 +3,16 @@ package com.polohach.unsplash.ui.screens.main.photo.list
 import android.app.Application
 import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
+import com.polohach.unsplash.App
 import com.polohach.unsplash.models.Photo
-import com.polohach.unsplash.providers.ProviderInjector
+import com.polohach.unsplash.network.api.modules.UnsplashModule
+import com.polohach.unsplash.providers.UnsplashProvider
 import com.polohach.unsplash.ui.base.BaseViewModel
 import com.polohach.unsplash.utils.EMPTY_STRING
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.processors.PublishProcessor
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 class ListPhotosVM(application: Application) : BaseViewModel(application) {
 
@@ -18,6 +21,13 @@ class ListPhotosVM(application: Application) : BaseViewModel(application) {
         private const val NETWORK_DELAY = 1000L
         private const val MIN_QUERY_LENGTH = 3
     }
+
+    init {
+        App.appComponent.inject(this)
+    }
+
+    @Inject
+    lateinit var unsplash: UnsplashProvider
 
     val currentStateLD = MutableLiveData<Parcelable?>()
     val initialPhotosLD = MutableLiveData<List<Photo>>()
@@ -62,12 +72,12 @@ class ListPhotosVM(application: Application) : BaseViewModel(application) {
     }
 
     private fun loadPhotos(liveData: MutableLiveData<List<Photo>>, page: Int) {
-        ProviderInjector.unsplash.getPhotos(page)
+        unsplash.getPhotos(page)
                 .doAsync(liveData, isShowProgress = false)
     }
 
     private fun searchPhotos(liveData: MutableLiveData<List<Photo>>, query: String, page: Int) {
-        ProviderInjector.unsplash.searchPhotos(query, page)
+        unsplash.searchPhotos(query, page)
                 .doAsync(liveData, isShowProgress = false)
     }
 }

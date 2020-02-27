@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.polohach.unsplash.models.Photo
 import com.polohach.unsplash.network.api.beans.PhotoBean
-import com.polohach.unsplash.network.api.converters.PhotoBeanConverterImpl
+import com.polohach.unsplash.network.api.converters.PhotoBeanConverter
 import com.polohach.unsplash.network.api.retrofit.UnsplashApi
 import com.polohach.unsplash.utils.EMPTY_STRING
 import com.polohach.unsplash.utils.OptionalWrapper
@@ -24,22 +24,22 @@ interface UnsplashModule {
     fun downloadPhoto(id: String): Single<OptionalWrapper<Bitmap>>
 }
 
-class UnsplashModuleImpl(api: UnsplashApi) :
-        BaseRxModule<UnsplashApi, PhotoBean, Photo>(api, PhotoBeanConverterImpl()), UnsplashModule {
+class UnsplashModuleImpl(api: UnsplashApi, private val errorUtils: NetworkErrorUtils, photoBeanConverter: PhotoBeanConverter) :
+        BaseRxModule<UnsplashApi, PhotoBean, Photo>(api, photoBeanConverter), UnsplashModule {
 
     override fun getPhotos(page: Int): Single<List<Photo>> =
             api.getPhotos(page)
-                    .onErrorResumeNext(NetworkErrorUtils.rxParseSingleError())
+                    .onErrorResumeNext(errorUtils.rxParseSingleError())
                     .map { converter.convertListInToOut(it.body()) }
 
     override fun searchPhotos(query: String, page: Int): Single<List<Photo>> =
             api.searchPhotos(query, page)
-                    .onErrorResumeNext(NetworkErrorUtils.rxParseSingleError())
+                    .onErrorResumeNext(errorUtils.rxParseSingleError())
                     .map { converter.convertListInToOut(it.body()?.results) }
 
     override fun downloadPhoto(id: String): Single<OptionalWrapper<Bitmap>> =
             api.downloadPhoto(id)
-                    .onErrorResumeNext(NetworkErrorUtils.rxParseSingleError())
+                    .onErrorResumeNext(errorUtils.rxParseSingleError())
                     .map { it.body()?.url ?: EMPTY_STRING }
                     .map { getBitmapFromURL(it) }
 

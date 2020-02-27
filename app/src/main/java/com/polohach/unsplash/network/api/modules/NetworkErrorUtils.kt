@@ -1,9 +1,8 @@
 package com.polohach.unsplash.network.api.modules
 
-
 import com.cleveroad.bootstrap.kotlin_core.network.ApiException
 import com.cleveroad.bootstrap.kotlin_core.network.ValidationError
-import com.polohach.unsplash.network.NetworkModule.mapper
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.polohach.unsplash.network.api.errors.ServerError
 import com.polohach.unsplash.network.exceptions.NoNetworkException
 import com.polohach.unsplash.network.exceptions.ServerException
@@ -24,8 +23,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.*
 
-
-object NetworkErrorUtils {
+class NetworkErrorUtils(private val mapper: ObjectMapper) {
 
     fun <T> rxParseSingleError() = Function<Throwable, Single<T>> {
         Single.error<T>(parseError(it))

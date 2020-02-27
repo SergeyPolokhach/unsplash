@@ -51,6 +51,8 @@ ext {
 
     interceptor_version = '2.0.7'
 
+    dagger_version = '2.26'
+
     supportDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
             appCompat         : "androidx.appcompat:appcompat:$supportVersion",
@@ -93,5 +95,10 @@ ext {
 
     loggingInterceptorDependencies = [
             interceptor: "com.github.ihsanbal:LoggingInterceptor:$interceptor_version"
+    ]
+
+    daggerDependencies = [
+            api: "com.google.dagger:dagger:$dagger_version",
+            annotationProcessor: "com.google.dagger:dagger-compiler:$dagger_version"
     ]
 }

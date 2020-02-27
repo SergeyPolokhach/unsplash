@@ -109,9 +109,9 @@ class DetailPhotoFragment : BaseFragment<DetailPhotoVM>(), View.OnClickListener 
 
     private fun getExtra() {
         arguments?.apply {
-            downloadUrl = getString(EXTRA_DOWNLOAD_URL)
-            photoUlr = getString(EXTRA_PHOTO_URL)
-            photoId = getString(EXTRA_PHOTO_ID)
+            downloadUrl = getString(EXTRA_DOWNLOAD_URL).orEmpty()
+            photoUlr = getString(EXTRA_PHOTO_URL).orEmpty()
+            photoId = getString(EXTRA_PHOTO_ID).orEmpty()
         }
     }
 

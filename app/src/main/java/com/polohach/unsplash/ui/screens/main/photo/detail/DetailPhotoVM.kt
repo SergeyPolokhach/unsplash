@@ -8,21 +8,30 @@ import android.provider.MediaStore
 import androidx.lifecycle.MutableLiveData
 import com.cleveroad.bootstrap.kotlin_core.utils.ImageUtils
 import com.cleveroad.bootstrap.kotlin_ext.safeLet
-import com.polohach.unsplash.providers.ProviderInjector
+import com.polohach.unsplash.App
+import com.polohach.unsplash.providers.UnsplashProvider
 import com.polohach.unsplash.ui.base.BaseViewModel
 import com.polohach.unsplash.utils.OptionalWrapper
 import com.polohach.unsplash.utils.wrapOptional
 import io.reactivex.Single
 import java.io.File
-
+import javax.inject.Inject
 
 class DetailPhotoVM(application: Application) : BaseViewModel(application) {
 
+    init {
+        App.appComponent.inject(this)
+    }
+
+    @Inject
+    lateinit var unsplash: UnsplashProvider
+
     val sharePhotoLD = MutableLiveData<OptionalWrapper<File>>()
+
     private val downloadPhotoLD = MutableLiveData<OptionalWrapper<File>>()
 
     fun downloadPhoto(context: Context?, id: String) {
-        ProviderInjector.unsplash.downloadPhoto(id)
+        unsplash.downloadPhoto(id)
                 .flatMap { createFileTemp(context, it.value) }
                 .doAsync(downloadPhotoLD)
     }

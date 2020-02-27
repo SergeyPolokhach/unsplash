@@ -3,9 +3,10 @@ package com.polohach.unsplash.network.api.converters
 import com.polohach.unsplash.models.Links
 import com.polohach.unsplash.models.LinksModel
 import com.polohach.unsplash.models.converters.BaseConverter
+import com.polohach.unsplash.models.converters.Converter
 import com.polohach.unsplash.network.api.beans.LinksBean
 
-interface LinksBeanConverter
+interface LinksBeanConverter: Converter<LinksBean, Links>
 
 class LinksBeanConverterImpl : BaseConverter<LinksBean, Links>(), LinksBeanConverter {
 

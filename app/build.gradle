@@ -62,6 +62,10 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -105,4 +109,8 @@ dependencies {
     implementation(loggingInterceptorDependencies.interceptor) {
         exclude group: 'org.json', module: 'json'
     }
+
+    // Dagger 2
+    implementation daggerDependencies.api
+    kapt daggerDependencies.annotationProcessor
 }
